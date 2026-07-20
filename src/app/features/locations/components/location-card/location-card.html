@@ -1,1 +1,13 @@
-<p>location-card works!</p>
+<article
+  class="group relative overflow-hidden rounded-3xl border border-cyan-400/20 bg-slate-900/70 p-6 shadow-xl backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-cyan-400/60 hover:shadow-[0_0_40px_rgba(34,211,238,0.25)]"
+>
+  <span class="rounded-full bg-cyan-400/10 px-3 py-1 text-sm font-semibold text-cyan-300">
+    {{ location().type }} <!-- type de lieu -->
+  </span>
+
+  <p class="mt-3 text-xl font-bold text-white">{{ location().name }}</p> <!-- nom du lieu -->
+  <p class="text-sm text-slate-400">{{ location().dimension }}</p> <!-- dimension -->
+
+  <p class="mt-4 text-xs uppercase tracking-widest text-slate-500">Habitants</p> <!-- libellé habitants -->
+  <p class="text-lg font-semibold text-green-300">{{ location().residents.length }}</p> <!-- nombre d'habitants -->
+</article>
