@@ -1,0 +1,50 @@
+<div class="mb-12 flex flex-wrap items-center justify-center gap-4">
+
+  <span class="text-sm font-semibold uppercase tracking-wider text-slate-400">
+    Filtrer par :
+  </span>
+
+  <select
+    [value]="status()"
+    (change)="onStatusChange($any($event.target).value)"
+    class="rounded-full border border-green-400/30 bg-slate-900/60 px-6 py-3 text-white outline-none focus:border-green-400"
+  >
+    <option value="">Statut : tous</option>
+    @for (option of statusOptions; track option) {
+      <option [value]="option">{{ option }}</option>
+    }
+  </select>
+
+  <select
+    [value]="species()"
+    (change)="onSpeciesChange($any($event.target).value)"
+    class="rounded-full border border-green-400/30 bg-slate-900/60 px-6 py-3 text-white outline-none focus:border-green-400"
+  >
+    <option value="">Espèce : toutes</option>
+    @for (option of speciesOptions; track option) {
+      <option [value]="option">{{ option }}</option>
+    }
+  </select>
+
+  <select
+    [value]="gender()"
+    (change)="onGenderChange($any($event.target).value)"
+    class="rounded-full border border-green-400/30 bg-slate-900/60 px-6 py-3 text-white outline-none focus:border-green-400"
+  >
+    <option value="">Genre : tous</option>
+    @for (option of genderOptions; track option) {
+      <option [value]="option">{{ option }}</option>
+    }
+  </select>
+
+  @if (status() || species() || gender()) {
+    <button
+      type="button"
+      (click)="resetFilters()"
+      class="rounded-full border border-cyan-300 px-8 py-3 font-semibold text-cyan-300 transition hover:bg-cyan-300 hover:text-slate-950"
+    >
+      Réinitialiser les filtres
+    </button>
+  }
+
+</div>

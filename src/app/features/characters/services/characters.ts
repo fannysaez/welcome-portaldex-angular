@@ -28,13 +28,31 @@ export class CharactersService {
     });
   }
 
-  // Recherche paginée par nom.
+  // Recherche paginée par nom, avec filtres optionnels statut/espèce/genre.
   // Si aucun personnage ne correspond, l'API renvoie une 404 : on retourne donc une réponse vide.
-  getCharacters(page: number = 1, name?: string): Observable<ApiResponse<Character[]>> {// Méthode pour récupérer les personnages avec pagination et recherche par nom.
+  getCharacters(
+    page: number = 1,
+    name?: string,
+    status?: string,
+    species?: string,
+    gender?: string,
+  ): Observable<ApiResponse<Character[]>> {// Méthode pour récupérer les personnages avec pagination, recherche par nom et filtres.
     let params = new HttpParams().set('page', page); // Initialise les paramètres avec la page.
 
     if (name) { // Vérifie si un nom est fourni pour la recherche.
       params = params.set('name', name); // Ajoute le filtre de recherche par nom si fourni.
+    }
+
+    if (status) { // Filtre par statut si fourni.
+      params = params.set('status', status);
+    }
+
+    if (species) { // Filtre par espèce si fourni.
+      params = params.set('species', species);
+    }
+
+    if (gender) { // Filtre par genre si fourni.
+      params = params.set('gender', gender);
     }
 
     return this.http.get<ApiResponse<Character[]>>(this.url, { params }).pipe(// Appel HTTP GET à l'API avec les paramètres.

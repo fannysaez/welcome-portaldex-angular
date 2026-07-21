@@ -61,6 +61,14 @@
       }
     </div>
 
+    <!-- Filtres (statut, espèce, genre) -->
+    <app-filter-character
+      [status]="statusFilter()"
+      [species]="speciesFilter()"
+      [gender]="genderFilter()"
+      (filterChange)="onFilterChange($event)"
+    />
+
     <!-- Cards -->
     <!-- Gère l'affichage du message lorsqu'aucun personnage ne correspond à la recherche -->
     @if (noResults()) {

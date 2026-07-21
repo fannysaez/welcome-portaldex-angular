@@ -6,10 +6,14 @@ import { CharactersService } from '../../services/characters'; // Service pour r
 import { ApiResponse, InfoResponse } from '../../../../shared/types/api-response.types'; // Types pour les réponses API
 import { Pagination } from '../../components/pagination/pagination'; // Composant pour la pagination
 import { PageNotFound } from '../../../error/page-not-found/page-not-found'; // Composant 404 réutilisé pour l'état "aucun résultat"
+import {
+  FilterCharacter,
+  CharacterFilters,
+} from '../../components/filter-character/filter-character'; // Composant pour filtrer les personnages (statut, espèce, genre)
 
 @Component({
   selector: 'app-characters', // Sélecteur du composant
-  imports: [CharacterCard, Pagination, FormsModule, PageNotFound], // Composants et modules importés dans ce composant
+  imports: [CharacterCard, Pagination, FormsModule, PageNotFound, FilterCharacter], // Composants et modules importés dans ce composant
   templateUrl: './characters.html',
   styleUrl: './characters.css',
 })
@@ -23,6 +27,10 @@ export class Characters implements OnInit { // Classe du composant implémentant
   searchTerm = signal(''); // Signal du terme de recherche
   noResults = signal(false); // Signal indiquant s'il n'y a aucun résultat
 
+  statusFilter = signal(''); // Signal du filtre statut
+  speciesFilter = signal(''); // Signal du filtre espèce
+  genderFilter = signal(''); // Signal du filtre genre
+
   ngOnInit() { // Hook du cycle de vie Angular appelé après l'initialisation
     this.fetchCharacters(1); // Charge les personnages de la première page au démarrage
   }
@@ -31,7 +39,13 @@ export class Characters implements OnInit { // Classe du composant implémentant
     this.currentPage.set(page); // Met à jour le numéro de la page actuelle
 
     this.characterService // Appelle le service
-      .getCharacters(page, this.searchTerm() || undefined) // Récupère les personnages avec la page et la recherche
+      .getCharacters(
+        page,
+        this.searchTerm() || undefined,
+        this.statusFilter() || undefined,
+        this.speciesFilter() || undefined,
+        this.genderFilter() || undefined,
+      ) // Récupère les personnages avec la page, la recherche et les filtres
       .subscribe((response: ApiResponse<Character[]>) => { // S'abonne à la réponse
         this.infos.set(response.info); // Stocke les infos de pagination dans le signal
         this.totalPage.set(this.infos().pages); // Met à jour le nombre total de pages
@@ -46,6 +60,13 @@ export class Characters implements OnInit { // Classe du composant implémentant
   resetSearch() { // Méthode pour réinitialiser la recherche
     this.searchTerm.set(''); // Efface le terme de recherche
     this.fetchCharacters(1); // Recharge les personnages de la première page
+  }
+
+  onFilterChange(filters: CharacterFilters) { // Méthode appelée quand un filtre change
+    this.statusFilter.set(filters.status); // Met à jour le filtre statut
+    this.speciesFilter.set(filters.species); // Met à jour le filtre espèce
+    this.genderFilter.set(filters.gender); // Met à jour le filtre genre
+    this.fetchCharacters(1); // Relance la recherche depuis la première page
   }
 
   changePage(page: number) { // Méthode pour changer de page
