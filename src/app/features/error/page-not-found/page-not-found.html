@@ -75,29 +75,29 @@
     </h2>
 
     <p
-      class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-200"
+      class="mx-auto mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-slate-200"
     >
-      Cette page semble avoir été aspirée dans un portail
-      interdimensionnel...
-      <br />
-      Rick a probablement encore bricolé quelque chose qu'il n'aurait pas dû.
+      {{ message }}
     </p>
 
     <div class="mt-12 flex flex-wrap justify-center gap-4">
 
       <button
-        routerLink="/"
+        [routerLink]="primaryRoute ?? undefined"
+        (click)="primaryAction.emit()"
         class="rounded-full bg-green-400 px-8 py-4 font-bold text-slate-950 shadow-[0_0_30px_rgba(74,222,128,0.5)] transition duration-300 hover:scale-105 hover:bg-green-300 hover:shadow-[0_0_50px_rgba(74,222,128,0.8)]"
       >
-        Retour à la Terre C-137
+        {{ primaryLabel }}
       </button>
 
+      @if (showSecondaryButton) {
       <button
         onclick="history.back()"
         class="rounded-full border border-cyan-300 bg-slate-900/50 px-8 py-4 font-semibold text-cyan-300 backdrop-blur transition hover:scale-105 hover:bg-cyan-300 hover:text-slate-950"
       >
-        Revenir en arrière
+        {{ secondaryLabel }}
       </button>
+      }
 
     </div>
   </div>
