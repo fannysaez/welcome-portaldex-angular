@@ -31,14 +31,55 @@
       </p>
     </div>
 
+    <!-- Recherche -->
+    <div class="mb-12 flex flex-wrap justify-center gap-4">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="search()"
+        placeholder="Rechercher un personnage par son nom..."
+        class="w-full max-w-md rounded-full border border-green-400/30 bg-slate-900/60 px-6 py-3 text-white placeholder-slate-500 outline-none focus:border-green-400"
+      />
+
+      <button
+        type="button"
+        (click)="search()"
+        class="rounded-full bg-green-400 px-8 py-3 font-bold text-slate-950 transition hover:scale-105"
+      >
+        Rechercher
+      </button>
+
+      <!-- Affiche le bouton "Réinitialiser" uniquement si une recherche a été effectuée (searchTerm n'est pas vide) -->
+      @if (searchTerm()) {
+      <button
+        type="button"
+        (click)="resetSearch()"
+        class="rounded-full border border-cyan-300 px-8 py-3 font-semibold text-cyan-300 transition hover:bg-cyan-300 hover:text-slate-950"
+      >
+        Réinitialiser
+      </button>
+      }
+    </div>
+
     <!-- Cards -->
-    <app-pagination [currentPage]="currentPage()" [totalPages]="totalPage()" (changePage)="changePage($event)"/>
+    <!-- Gère l'affichage du message lorsqu'aucun personnage ne correspond à la recherche -->
+    @if (noResults()) {
+    <app-page-not-found
+      [message]="'Aucun personnage ne correspond à ta recherche...\nEssaie un autre nom, ou réinitialise pour retrouver la liste complète.'"
+      primaryLabel="Réinitialiser la recherche"
+      [primaryRoute]="null"
+      [showSecondaryButton]="false"
+      (primaryAction)="resetSearch()"
+    />
+    } @else {
+      <app-pagination [currentPage]="currentPage()" [totalPages]="totalPage()" (changePage)="changePage($event)" /> <!-- Affiche la pagination et permet de changer de page -->
     <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-      @for(character of characters(); track character.id) {
+      @for(character of characters(); track character.id) { <!-- Parcourt la liste des personnages et utilise leur id pour optimiser l'affichage -->
 
       <app-character-card [character]="character" />
 
       }
     </div>
+    }
   </div>
 </section>
